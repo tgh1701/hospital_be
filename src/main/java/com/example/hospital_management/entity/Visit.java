@@ -1,6 +1,7 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,28 +10,31 @@ import java.util.Objects;
 public class Visit {
 
     @Id
-    @Column(name = "VisitID", length = 10)
+    @Column(name = "Visitid", length = 10)
     private String visitId;
 
-    @Column(name = "PatientID", length = 10)
+    @Column(name = "Patientid", length = 10)
     private String patientId;
 
-    @Column(name = "DoctorID", length = 10)
+    @Column(name = "Doctorid", length = 10)
     private String doctorId;
 
-    @Column(name = "DiseaseID", length = 10)
+    @Column(name = "Diseaseid", length = 10)
     private String diseaseId;
 
-    @Column(name = "DateIn")
+    @Column(name = "Datein")
     @Temporal(TemporalType.DATE)
     private Date dateIn;
 
-    @Column(name = "DateOut")
+    @Column(name = "Dateout")
     @Temporal(TemporalType.DATE)
     private Date dateOut;
 
-    @Column(name = "TotalPrice")
+    @Column(name = "Totalprice")
     private int totalPrice;
+
+    @Column(name = "Status")
+    private String status;
 
     // Getters and Setters
     public String getVisitId() {
@@ -89,6 +93,14 @@ public class Visit {
         this.totalPrice = totalPrice;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     // toString method
     @Override
     public String toString() {
@@ -100,6 +112,7 @@ public class Visit {
                 ", dateIn=" + dateIn +
                 ", dateOut=" + dateOut +
                 ", totalPrice=" + totalPrice +
+                ", status='" + status + '\'' +
                 '}';
     }
 
@@ -115,12 +128,13 @@ public class Visit {
                 Objects.equals(doctorId, visit.doctorId) &&
                 Objects.equals(diseaseId, visit.diseaseId) &&
                 Objects.equals(dateIn, visit.dateIn) &&
-                Objects.equals(dateOut, visit.dateOut);
+                Objects.equals(dateOut, visit.dateOut) &&
+                Objects.equals(status, visit.status);
     }
 
     // hashCode method
     @Override
     public int hashCode() {
-        return Objects.hash(visitId, patientId, doctorId, diseaseId, dateIn, dateOut, totalPrice);
+        return Objects.hash(visitId, patientId, doctorId, diseaseId, dateIn, dateOut, totalPrice, status);
     }
 }

@@ -1,6 +1,9 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
 
 @Entity
@@ -8,11 +11,14 @@ import java.util.Objects;
 public class Disease {
 
     @Id
-    @Column(name = "DiseaseID", length = 10)
+    @Column(name = "Diseaseid", length = 10)
     private String diseaseId;
 
-    @Column(name = "DiseaseName", length = 100)
+    @Column(name = "Diseasename", length = 100)
     private String diseaseName;
+
+    @Column(name = "Department", length = 100)
+    private String department;
 
     // Getters and Setters
     public String getDiseaseId() {
@@ -31,12 +37,21 @@ public class Disease {
         this.diseaseName = diseaseName;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
     // toString method
     @Override
     public String toString() {
         return "Disease{" +
                 "diseaseId='" + diseaseId + '\'' +
                 ", diseaseName='" + diseaseName + '\'' +
+                ", department='" + department + '\'' +
                 '}';
     }
 
@@ -44,15 +59,15 @@ public class Disease {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Disease)) return false;
-        Disease disease = (Disease) o;
+        if (!(o instanceof Disease disease)) return false;
         return Objects.equals(diseaseId, disease.diseaseId) &&
-                Objects.equals(diseaseName, disease.diseaseName);
+                Objects.equals(diseaseName, disease.diseaseName) &&
+                Objects.equals(department, disease.department);
     }
 
     // hashCode method
     @Override
     public int hashCode() {
-        return Objects.hash(diseaseId, diseaseName);
+        return Objects.hash(diseaseId, diseaseName, department);
     }
 }

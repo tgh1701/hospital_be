@@ -1,9 +1,13 @@
 package com.example.hospital_management.service;
 
-import com.example.hospital_management.entity.Prescription; // Nếu bạn có class Prescription, hãy import
+import com.example.hospital_management.entity.Prescription;
+import com.example.hospital_management.exception.CustomException;
 import com.example.hospital_management.repository.PrescriptionRepository;
+import com.example.hospital_management.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -16,14 +20,26 @@ public class PrescriptionService {
     }
 
     public Prescription getPrescriptionById(String id) {
-        return prescriptionRepository.findById(id).orElse(null);
+        return prescriptionRepository.findById(id).orElseThrow(() ->
+                new CustomException(404, "Prescription with ID " + id + " not found."));
     }
 
     public Prescription savePrescription(Prescription prescription) {
+        if (prescription.getPrescriptionId() != null && prescriptionRepository.existsById(prescription.getPrescriptionId())) {
+            throw new CustomException(409, "Prescription with ID " + prescription.getPrescriptionId() + " already exists.");
+        }
         return prescriptionRepository.save(prescription);
     }
 
-    public void deletePrescription(String id) {
-        prescriptionRepository.deleteById(id);
+    public ApiResponse deletePrescription(String id) {
+        if (!prescriptionRepository.existsById(id)) {
+            throw new CustomException(404, "Prescription with ID " + id + " not found.");
+        }
+        try {
+            prescriptionRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomException(400, "Cannot delete this prescription as it is associated with existing records.");
+        }
+        return new ApiResponse(200, "Delete Success");
     }
 }

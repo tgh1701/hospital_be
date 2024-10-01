@@ -1,6 +1,6 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,35 +9,35 @@ import java.util.Objects;
 public class Doctor {
 
     @Id
-    @Column(name = "DoctorID", length = 10)
+    @Column(name = "Doctorid", length = 10)
     private String doctorId;
 
-    @Column(name = "IdentityCard", unique = true, length = 12)
+    @Column(name = "Identitycard", unique = true, length = 12)
     private String identityCard;
 
-    @Column(name = "DoctorName", length = 100)
+    @Column(name = "Doctorname", length = 100)
     private String doctorName;
 
-    @Column(name = "DateOfBirth")
+    @Column(name = "Dateofbirth")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @Column(name = "Address", length = 200)
     private String address;
 
-    @Column(name = "CareerLevel")
-    private int careerLevel;
+    @Column(name = "Careerlevel", nullable = false)
+    private Integer careerLevel;
 
-    @Column(name = "Seniority")
-    private int seniority;
+    @Column(name = "Seniority", nullable = false)
+    private Integer seniority;
 
     @Column(name = "Level", length = 50)
     private String level;
 
-    @Column(name = "Expertise", length = 100)
-    private String expertise;
+    @Column(name = "Department", length = 100)
+    private String department;
 
-    // Getter và Setter cho từng trường
+    // Getters and Setters
     public String getDoctorId() {
         return doctorId;
     }
@@ -78,19 +78,19 @@ public class Doctor {
         this.address = address;
     }
 
-    public int getCareerLevel() {
+    public Integer getCareerLevel() {
         return careerLevel;
     }
 
-    public void setCareerLevel(int careerLevel) {
+    public void setCareerLevel(Integer careerLevel) {
         this.careerLevel = careerLevel;
     }
 
-    public int getSeniority() {
+    public Integer getSeniority() {
         return seniority;
     }
 
-    public void setSeniority(int seniority) {
+    public void setSeniority(Integer seniority) {
         this.seniority = seniority;
     }
 
@@ -102,12 +102,12 @@ public class Doctor {
         this.level = level;
     }
 
-    public String getExpertise() {
-        return expertise;
+    public String getDepartment() {
+        return department;
     }
 
-    public void setExpertise(String expertise) {
-        this.expertise = expertise;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     // Override toString() method
@@ -122,7 +122,7 @@ public class Doctor {
                 ", careerLevel=" + careerLevel +
                 ", seniority=" + seniority +
                 ", level='" + level + '\'' +
-                ", expertise='" + expertise + '\'' +
+                ", department='" + department + '\'' +
                 '}';
     }
 
@@ -130,22 +130,21 @@ public class Doctor {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Doctor)) return false;
-        Doctor doctor = (Doctor) o;
-        return careerLevel == doctor.careerLevel &&
-                seniority == doctor.seniority &&
+        if (!(o instanceof Doctor doctor)) return false;
+        return Objects.equals(careerLevel, doctor.careerLevel) &&
+                Objects.equals(seniority, doctor.seniority) &&
                 Objects.equals(doctorId, doctor.doctorId) &&
                 Objects.equals(identityCard, doctor.identityCard) &&
                 Objects.equals(doctorName, doctor.doctorName) &&
                 Objects.equals(dateOfBirth, doctor.dateOfBirth) &&
                 Objects.equals(address, doctor.address) &&
                 Objects.equals(level, doctor.level) &&
-                Objects.equals(expertise, doctor.expertise);
+                Objects.equals(department, doctor.department);
     }
 
     // Override hashCode() method
     @Override
     public int hashCode() {
-        return Objects.hash(doctorId, identityCard, doctorName, dateOfBirth, address, careerLevel, seniority, level, expertise);
+        return Objects.hash(doctorId, identityCard, doctorName, dateOfBirth, address, careerLevel, seniority, level, department);
     }
 }

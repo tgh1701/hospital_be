@@ -1,6 +1,10 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.util.Objects;
 
 @Entity
@@ -8,10 +12,10 @@ import java.util.Objects;
 public class Medicine {
 
     @Id
-    @Column(name = "MedicineID", length = 10)
+    @Column(name = "Medicineid", length = 10)
     private String medicineId;
 
-    @Column(name = "MedicineName", length = 100)
+    @Column(name = "Medicinename", length = 100)
     private String medicineName;
 
     @Column(name = "Price")
@@ -56,8 +60,7 @@ public class Medicine {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Medicine)) return false;
-        Medicine medicine = (Medicine) o;
+        if (!(o instanceof Medicine medicine)) return false;
         return price == medicine.price &&
                 Objects.equals(medicineId, medicine.medicineId) &&
                 Objects.equals(medicineName, medicine.medicineName);

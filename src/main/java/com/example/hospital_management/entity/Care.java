@@ -1,6 +1,7 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,16 +10,16 @@ import java.util.Objects;
 public class Care {
 
     @Id
-    @Column(name = "CareID", length = 10)
+    @Column(name = "Careid", length = 10)
     private String careId;
 
-    @Column(name = "VisitID", length = 10)
+    @Column(name = "Visitid", length = 10)
     private String visitId;
 
-    @Column(name = "NurseID", length = 10)
+    @Column(name = "Nurseid", length = 10)
     private String nurseId;
 
-    @Column(name = "DateCare")
+    @Column(name = "Datecare")
     @Temporal(TemporalType.DATE)
     private Date dateCare;
 
@@ -70,8 +71,7 @@ public class Care {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Care)) return false;
-        Care care = (Care) o;
+        if (!(o instanceof Care care)) return false;
         return Objects.equals(careId, care.careId) &&
                 Objects.equals(visitId, care.visitId) &&
                 Objects.equals(nurseId, care.nurseId) &&

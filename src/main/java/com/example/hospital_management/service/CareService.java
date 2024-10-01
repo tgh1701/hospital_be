@@ -1,9 +1,13 @@
 package com.example.hospital_management.service;
 
-import com.example.hospital_management.entity.Care; // Nếu bạn có class Care, hãy import
+import com.example.hospital_management.entity.Care;
+import com.example.hospital_management.exception.CustomException;
 import com.example.hospital_management.repository.CareRepository;
+import com.example.hospital_management.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -16,14 +20,26 @@ public class CareService {
     }
 
     public Care getCareById(String id) {
-        return careRepository.findById(id).orElse(null);
+        return careRepository.findById(id).orElseThrow(() ->
+                new CustomException(404, "Care with ID " + id + " not found."));
     }
 
     public Care saveCare(Care care) {
+        if (care.getCareId() != null && careRepository.existsById(care.getCareId())) {
+            throw new CustomException(409, "Care with ID " + care.getCareId() + " already exists.");
+        }
         return careRepository.save(care);
     }
 
-    public void deleteCare(String id) {
-        careRepository.deleteById(id);
+    public ApiResponse deleteCare(String id) {
+        if (!careRepository.existsById(id)) {
+            throw new CustomException(404, "Care with ID " + id + " not found.");
+        }
+        try {
+            careRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomException(400, "Cannot delete this care entry as it is associated with existing records.");
+        }
+        return new ApiResponse(200, "Delete Success");
     }
 }

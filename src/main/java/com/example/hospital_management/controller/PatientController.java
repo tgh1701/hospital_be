@@ -1,9 +1,14 @@
 package com.example.hospital_management.controller;
 
-import com.example.hospital_management.entity.Patient; // Nếu bạn có class Patient, hãy import
+import com.example.hospital_management.entity.Patient;
+import com.example.hospital_management.exception.CustomException;
+import com.example.hospital_management.response.ApiResponse;
 import com.example.hospital_management.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -13,28 +18,58 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping
-    public List<Patient> getAllPatients() {
-        return patientService.getAllPatients();
+    public ResponseEntity<ApiResponse> getAllPatients() {
+        List<Patient> patients = patientService.getAllPatients();
+        if (patients.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body(new ApiResponse(204, "No patients found"));
+        }
+        return ResponseEntity.ok(new ApiResponse(200, "Patients retrieved successfully", patients));
     }
 
     @GetMapping("/{id}")
-    public Patient getPatientById(@PathVariable String id) {
-        return patientService.getPatientById(id);
+    public ResponseEntity<ApiResponse> getPatientById(@PathVariable String id) {
+        try {
+            Patient patient = patientService.getPatientById(id);
+            return ResponseEntity.ok(new ApiResponse(200, "Patient retrieved successfully", patient));
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(new ApiResponse(e.getStatusCode(), e.getMessage()));
+        }
     }
 
     @PostMapping
-    public Patient createPatient(@RequestBody Patient patient) {
-        return patientService.savePatient(patient);
+    public ResponseEntity<ApiResponse> createPatient(@RequestBody Patient patient) {
+        try {
+            Patient savedPatient = patientService.savePatient(patient);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse(201, "Patient created successfully", savedPatient));
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(new ApiResponse(e.getStatusCode(), e.getMessage()));
+        }
     }
 
     @PutMapping("/{id}")
-    public Patient updatePatient(@PathVariable String id, @RequestBody Patient patient) {
-        patient.setPatientId(id); // Cập nhật ID nếu cần thiết
-        return patientService.savePatient(patient);
+    public ResponseEntity<ApiResponse> updatePatient(@PathVariable String id, @RequestBody Patient patient) {
+        try {
+            patient.setPatientId(id);
+            Patient updatedPatient = patientService.savePatient(patient);
+            return ResponseEntity.ok(new ApiResponse(200, "Patient updated successfully", updatedPatient));
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(new ApiResponse(e.getStatusCode(), e.getMessage()));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletePatient(@PathVariable String id) {
-        patientService.deletePatient(id);
+    public ResponseEntity<ApiResponse> deletePatient(@PathVariable String id) {
+        try {
+            ApiResponse response = patientService.deletePatient(id);
+            return ResponseEntity.ok(response);
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(new ApiResponse(e.getStatusCode(), e.getMessage()));
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.example.hospital_management.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
 
 @Entity
@@ -8,13 +11,13 @@ import java.util.Objects;
 public class Prescription {
 
     @Id
-    @Column(name = "PrescriptionID", length = 10)
+    @Column(name = "Prescriptionid", length = 10)
     private String prescriptionId;
 
-    @Column(name = "VisitID", length = 10)
+    @Column(name = "Visitid", length = 10)
     private String visitId;
 
-    @Column(name = "MedicineID", length = 10)
+    @Column(name = "Medicineid", length = 10)
     private String medicineId;
 
     @Column(name = "Quantity")
@@ -68,8 +71,7 @@ public class Prescription {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Prescription)) return false;
-        Prescription that = (Prescription) o;
+        if (!(o instanceof Prescription that)) return false;
         return quantity == that.quantity &&
                 Objects.equals(prescriptionId, that.prescriptionId) &&
                 Objects.equals(visitId, that.visitId) &&
