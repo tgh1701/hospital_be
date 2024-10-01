@@ -120,8 +120,7 @@ public class Visit {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Visit)) return false;
-        Visit visit = (Visit) o;
+        if (!(o instanceof Visit visit)) return false;
         return totalPrice == visit.totalPrice &&
                 Objects.equals(visitId, visit.visitId) &&
                 Objects.equals(patientId, visit.patientId) &&

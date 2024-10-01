@@ -1,5 +1,6 @@
 package com.example.hospital_management.service;
 
+import com.example.hospital_management.dto.VisitInfoDTO;
 import com.example.hospital_management.entity.Visit;
 import com.example.hospital_management.exception.CustomException;
 import com.example.hospital_management.repository.VisitRepository;
@@ -15,8 +16,8 @@ public class VisitService {
     @Autowired
     private VisitRepository visitRepository;
 
-    public List<Visit> getAllVisits() {
-        return visitRepository.findAll();
+    public List<VisitInfoDTO> getAllVisitInfo() {
+        return visitRepository.findAllVisitInfo();
     }
 
     public Visit getVisitById(String id) {

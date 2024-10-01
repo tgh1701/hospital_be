@@ -1,5 +1,6 @@
 package com.example.hospital_management.controller;
 
+import com.example.hospital_management.dto.VisitInfoDTO;
 import com.example.hospital_management.entity.Visit;
 import com.example.hospital_management.exception.CustomException;
 import com.example.hospital_management.response.ApiResponse;
@@ -19,7 +20,7 @@ public class VisitController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllVisits() {
-        List<Visit> visits = visitService.getAllVisits();
+        List<VisitInfoDTO> visits = visitService.getAllVisitInfo();
         if (visits.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body(new ApiResponse(204, "No visits found"));
