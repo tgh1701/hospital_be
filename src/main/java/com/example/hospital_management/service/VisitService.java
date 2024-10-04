@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VisitService {
@@ -23,6 +24,25 @@ public class VisitService {
     public Visit getVisitById(String id) {
         return visitRepository.findById(id).orElseThrow(() ->
                 new CustomException(404, "Visit with ID " + id + " not found."));
+    }
+
+    public Visit updateVisit(String id, Visit updatedVisit) throws CustomException {
+        Optional<Visit> existingVisitOptional = visitRepository.findById(id);
+        if (existingVisitOptional.isPresent()) {
+            Visit existingVisit = existingVisitOptional.get();
+
+            existingVisit.setPatientId(updatedVisit.getPatientId());
+            existingVisit.setDoctorId(updatedVisit.getDoctorId());
+            existingVisit.setDiseaseId(updatedVisit.getDiseaseId());
+            existingVisit.setDateIn(updatedVisit.getDateIn());
+            existingVisit.setDateOut(updatedVisit.getDateOut());
+            existingVisit.setTotalPrice(updatedVisit.getTotalPrice());
+            existingVisit.setStatus(updatedVisit.getStatus());
+
+            return visitRepository.save(existingVisit);
+        } else {
+            throw new CustomException(404, "Visit not found");
+        }
     }
 
     public Visit saveVisit(Visit visit) {

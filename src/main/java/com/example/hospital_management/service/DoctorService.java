@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DoctorService {
@@ -16,8 +17,7 @@ public class DoctorService {
     private DoctorRepository doctorRepository;
 
     public List<Doctor> getAllDoctors() {
-        List<Doctor> doctors = doctorRepository.findAll();
-        return doctors;
+        return doctorRepository.findAll();
     }
 
     public Doctor getDoctorById(String id) {
@@ -30,6 +30,26 @@ public class DoctorService {
             throw new CustomException(409, "Doctor with ID " + doctor.getDoctorId() + " already exists.");
         }
         return doctorRepository.save(doctor);
+    }
+
+    public Doctor updateDoctor(String id, Doctor updatedDoctor) throws CustomException {
+        Optional<Doctor> existingDoctorOptional = doctorRepository.findById(id);
+        if (existingDoctorOptional.isPresent()) {
+            Doctor existingDoctor = existingDoctorOptional.get();
+
+            existingDoctor.setDoctorName(updatedDoctor.getDoctorName());
+            existingDoctor.setIdentityCard(updatedDoctor.getIdentityCard());
+            existingDoctor.setDateOfBirth(updatedDoctor.getDateOfBirth());
+            existingDoctor.setAddress(updatedDoctor.getAddress());
+            existingDoctor.setCareerLevel(updatedDoctor.getCareerLevel());
+            existingDoctor.setSeniority(updatedDoctor.getSeniority());
+            existingDoctor.setLevel(updatedDoctor.getLevel());
+            existingDoctor.setDepartment(updatedDoctor.getDepartment());
+
+            return doctorRepository.save(existingDoctor);
+        } else {
+            throw new CustomException(404, "Doctor not found");
+        }
     }
 
     public ApiResponse deleteDoctor(String id) {

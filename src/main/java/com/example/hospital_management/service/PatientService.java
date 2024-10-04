@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PatientService {
@@ -22,6 +23,23 @@ public class PatientService {
     public Patient getPatientById(String id) {
         return patientRepository.findById(id).orElseThrow(() ->
                 new CustomException(404, "Patient with ID " + id + " not found."));
+    }
+
+    public Patient updatePatient(String id, Patient updatedPatient) throws CustomException {
+        Optional<Patient> existingPatientOptional = patientRepository.findById(id);
+        if (existingPatientOptional.isPresent()) {
+            Patient existingPatient = existingPatientOptional.get();
+
+            existingPatient.setIdentityCard(updatedPatient.getIdentityCard());
+            existingPatient.setPatientName(updatedPatient.getPatientName());
+            existingPatient.setDateOfBirth(updatedPatient.getDateOfBirth());
+            existingPatient.setAddress(updatedPatient.getAddress());
+            existingPatient.setPhone(updatedPatient.getPhone());
+
+            return patientRepository.save(existingPatient);
+        } else {
+            throw new CustomException(404, "Patient not found");
+        }
     }
 
     public Patient savePatient(Patient patient) {

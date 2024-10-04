@@ -54,7 +54,7 @@ public class PrescriptionController {
     public ResponseEntity<ApiResponse> updatePrescription(@PathVariable String id, @RequestBody Prescription prescription) {
         try {
             prescription.setPrescriptionId(id);
-            Prescription updatedPrescription = prescriptionService.savePrescription(prescription);
+            Prescription updatedPrescription = prescriptionService.updatePrescription(id, prescription);
             return ResponseEntity.ok(new ApiResponse(200, "Prescription updated successfully", updatedPrescription));
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatusCode())

@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PrescriptionService {
@@ -22,6 +23,21 @@ public class PrescriptionService {
     public Prescription getPrescriptionById(String id) {
         return prescriptionRepository.findById(id).orElseThrow(() ->
                 new CustomException(404, "Prescription with ID " + id + " not found."));
+    }
+
+    public Prescription updatePrescription(String id, Prescription updatedPrescription) throws CustomException {
+        Optional<Prescription> existingPrescriptionOptional = prescriptionRepository.findById(id);
+        if (existingPrescriptionOptional.isPresent()) {
+            Prescription existingPrescription = existingPrescriptionOptional.get();
+
+            existingPrescription.setVisitId(updatedPrescription.getVisitId());
+            existingPrescription.setMedicineId(updatedPrescription.getMedicineId());
+            existingPrescription.setQuantity(updatedPrescription.getQuantity());
+
+            return prescriptionRepository.save(existingPrescription);
+        } else {
+            throw new CustomException(404, "Prescription not found");
+        }
     }
 
     public Prescription savePrescription(Prescription prescription) {

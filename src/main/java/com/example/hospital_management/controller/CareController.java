@@ -54,7 +54,7 @@ public class CareController {
     public ResponseEntity<ApiResponse> updateCare(@PathVariable String id, @RequestBody Care care) {
         try {
             care.setCareId(id);
-            Care updatedCare = careService.saveCare(care);
+            Care updatedCare = careService.updateCare(id, care);
             return ResponseEntity.ok(new ApiResponse(200, "Care updated successfully", updatedCare));
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatusCode())

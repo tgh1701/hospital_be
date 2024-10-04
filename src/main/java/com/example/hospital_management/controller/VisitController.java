@@ -55,7 +55,7 @@ public class VisitController {
     public ResponseEntity<ApiResponse> updateVisit(@PathVariable String id, @RequestBody Visit visit) {
         try {
             visit.setVisitId(id);
-            Visit updatedVisit = visitService.saveVisit(visit);
+            Visit updatedVisit = visitService.updateVisit(id, visit);
             return ResponseEntity.ok(new ApiResponse(200, "Visit updated successfully", updatedVisit));
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatusCode())

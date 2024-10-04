@@ -54,7 +54,7 @@ public class NurseController {
     public ResponseEntity<ApiResponse> updateNurse(@PathVariable String id, @RequestBody Nurse nurse) {
         try {
             nurse.setNurseId(id);
-            Nurse updatedNurse = nurseService.saveNurse(nurse);
+            Nurse updatedNurse = nurseService.updateNurse(id, nurse);
             return ResponseEntity.ok(new ApiResponse(200, "Nurse updated successfully", updatedNurse));
         } catch (CustomException e) {
             return ResponseEntity.status(e.getStatusCode())

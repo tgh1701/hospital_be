@@ -9,6 +9,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CareService {
@@ -29,6 +30,21 @@ public class CareService {
             throw new CustomException(409, "Care with ID " + care.getCareId() + " already exists.");
         }
         return careRepository.save(care);
+    }
+
+    public Care updateCare(String id, Care updatedCare) throws CustomException {
+        Optional<Care> existingCareOptional = careRepository.findById(id);
+        if (existingCareOptional.isPresent()) {
+            Care existingCare = existingCareOptional.get();
+
+            existingCare.setVisitId(updatedCare.getVisitId());
+            existingCare.setNurseId(updatedCare.getNurseId());
+            existingCare.setDateCare(updatedCare.getDateCare());
+
+            return careRepository.save(existingCare);
+        } else {
+            throw new CustomException(404, "Care not found");
+        }
     }
 
     public ApiResponse deleteCare(String id) {
