@@ -1,9 +1,54 @@
 package com.example.hospital_management.repository;
 
-import com.example.hospital_management.entity.Prescription;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
-public interface PrescriptionRepository extends JpaRepository<Prescription, String> {
+public class PrescriptionRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public PrescriptionRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public List<Map<String, Object>> getPrescriptionByVisitId(String visitId) {
+        String sql = """
+                SELECT 
+                    p.PrescriptionID,
+                    pm.MedicineID,
+                    m.MedicineName,
+                    pm.Quantity,
+                    m.Price,
+                    (pm.Quantity * m.Price) AS TotalMedicinePrice,
+                    v.TotalPrice,
+                    pat.PatientName,
+                    d.DoctorName,
+                    v.DateIn,
+                    v.DateOut
+                FROM 
+                    Prescription p
+                JOIN 
+                    PrescriptionMedicine pm ON p.PrescriptionID = pm.PrescriptionID
+                JOIN 
+                    Medicine m ON pm.MedicineID = m.MedicineID
+                JOIN 
+                    Visit v ON p.VisitID = v.VisitID
+                JOIN 
+                    Patient pat ON v.PatientID = pat.PatientID
+                JOIN 
+                    Doctor d ON v.DoctorID = d.DoctorID
+                WHERE 
+                    v.VisitID = ?
+                """;
+        return jdbcTemplate.queryForList(sql, visitId);
+    }
+
+    public int deletePrescriptionByVisitId(String visitId) {
+        String sql = "DELETE FROM Prescription WHERE VisitID = ?";
+        return jdbcTemplate.update(sql, visitId);
+    }
 }
