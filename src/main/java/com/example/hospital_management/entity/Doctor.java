@@ -34,8 +34,8 @@ public class Doctor {
     @Column(name = "Level", length = 50)
     private String level;
 
-    @Column(name = "Department", length = 100)
-    private String department;
+    @Column(name = "Departmentid", length = 100)
+    private String departmentId;
 
     // Getters and Setters
     public String getDoctorId() {
@@ -103,11 +103,11 @@ public class Doctor {
     }
 
     public String getDepartment() {
-        return department;
+        return departmentId;
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        this.departmentId = department;
     }
 
     // Override toString() method
@@ -122,7 +122,7 @@ public class Doctor {
                 ", careerLevel=" + careerLevel +
                 ", seniority=" + seniority +
                 ", level='" + level + '\'' +
-                ", department='" + department + '\'' +
+                ", departmentId='" + departmentId + '\'' +
                 '}';
     }
 
@@ -139,12 +139,12 @@ public class Doctor {
                 Objects.equals(dateOfBirth, doctor.dateOfBirth) &&
                 Objects.equals(address, doctor.address) &&
                 Objects.equals(level, doctor.level) &&
-                Objects.equals(department, doctor.department);
+                Objects.equals(departmentId, doctor.departmentId);
     }
 
     // Override hashCode() method
     @Override
     public int hashCode() {
-        return Objects.hash(doctorId, identityCard, doctorName, dateOfBirth, address, careerLevel, seniority, level, department);
+        return Objects.hash(doctorId, identityCard, doctorName, dateOfBirth, address, careerLevel, seniority, level, departmentId);
     }
 }

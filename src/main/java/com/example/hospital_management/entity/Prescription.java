@@ -1,9 +1,6 @@
 package com.example.hospital_management.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -14,14 +11,9 @@ public class Prescription {
     @Column(name = "Prescriptionid", length = 10)
     private String prescriptionId;
 
-    @Column(name = "Visitid", length = 10)
-    private String visitId;
-
-    @Column(name = "Medicineid", length = 10)
-    private String medicineId;
-
-    @Column(name = "Quantity")
-    private int quantity;
+    @ManyToOne(fetch = FetchType.EAGER) // Dùng EAGER để tránh Lazy Loading Issue
+    @JoinColumn(name = "Visitid", referencedColumnName = "Visitid", nullable = false)
+    private Visit visit;
 
     // Getters and Setters
     public String getPrescriptionId() {
@@ -32,28 +24,12 @@ public class Prescription {
         this.prescriptionId = prescriptionId;
     }
 
-    public String getVisitId() {
-        return visitId;
+    public Visit getVisit() {
+        return visit;
     }
 
-    public void setVisitId(String visitId) {
-        this.visitId = visitId;
-    }
-
-    public String getMedicineId() {
-        return medicineId;
-    }
-
-    public void setMedicineId(String medicineId) {
-        this.medicineId = medicineId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setVisit(Visit visit) {
+        this.visit = visit;
     }
 
     // toString method
@@ -61,9 +37,7 @@ public class Prescription {
     public String toString() {
         return "Prescription{" +
                 "prescriptionId='" + prescriptionId + '\'' +
-                ", visitId='" + visitId + '\'' +
-                ", medicineId='" + medicineId + '\'' +
-                ", quantity=" + quantity +
+                ", visit=" + (visit != null ? visit.getVisitId() : null) +
                 '}';
     }
 
@@ -72,15 +46,13 @@ public class Prescription {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Prescription that)) return false;
-        return quantity == that.quantity &&
-                Objects.equals(prescriptionId, that.prescriptionId) &&
-                Objects.equals(visitId, that.visitId) &&
-                Objects.equals(medicineId, that.medicineId);
+        return Objects.equals(prescriptionId, that.prescriptionId) &&
+                Objects.equals(visit, that.visit);
     }
 
     // hashCode method
     @Override
     public int hashCode() {
-        return Objects.hash(prescriptionId, visitId, medicineId, quantity);
+        return Objects.hash(prescriptionId, visit);
     }
 }

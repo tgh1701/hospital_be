@@ -118,19 +118,21 @@ public class StatisticsRepository {
 
     public TotalRevenueDTO getTotalRevenue(LocalDate startDate, LocalDate endDate) {
         String sql = """
-            SELECT 
-                SUM(v.TotalPrice) + (
-                    SELECT SUM(m.Price * p.Quantity) 
-                    FROM Prescription p 
-                    JOIN Medicine m ON p.MedicineID = m.MedicineID
-                    JOIN Visit v ON p.VisitID = v.VisitID
-                    WHERE v.DateOut BETWEEN ? AND ?
-                ) AS TotalRevenue
-            FROM Visit v
-            WHERE v.DateOut BETWEEN ? AND ?
-        """;
+        SELECT 
+            SUM(v.TotalPrice) + SUM(m.Price * pm.Quantity) AS TotalRevenue
+        FROM 
+            Visit v
+        LEFT JOIN 
+            Prescription p ON v.VisitID = p.VisitID
+        LEFT JOIN 
+            PrescriptionMedicine pm ON p.PrescriptionID = pm.PrescriptionID
+        LEFT JOIN 
+            Medicine m ON pm.MedicineID = m.MedicineID
+        WHERE 
+            v.DateOut BETWEEN ? AND ?
+    """;
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> new TotalRevenueDTO(
                 rs.getDouble("TotalRevenue")
-        ), startDate, endDate, startDate, endDate);
+        ), startDate, endDate);
     }
 }

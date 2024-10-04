@@ -17,8 +17,8 @@ public class Disease {
     @Column(name = "Diseasename", length = 100)
     private String diseaseName;
 
-    @Column(name = "Department", length = 100)
-    private String department;
+    @Column(name = "Departmentid", length = 100)
+    private String departmentId;
 
     // Getters and Setters
     public String getDiseaseId() {
@@ -38,11 +38,11 @@ public class Disease {
     }
 
     public String getDepartment() {
-        return department;
+        return departmentId;
     }
 
     public void setDepartment(String department) {
-        this.department = department;
+        this.departmentId = department;
     }
 
     // toString method
@@ -51,7 +51,7 @@ public class Disease {
         return "Disease{" +
                 "diseaseId='" + diseaseId + '\'' +
                 ", diseaseName='" + diseaseName + '\'' +
-                ", department='" + department + '\'' +
+                ", departmentId='" + departmentId + '\'' +
                 '}';
     }
 
@@ -62,12 +62,12 @@ public class Disease {
         if (!(o instanceof Disease disease)) return false;
         return Objects.equals(diseaseId, disease.diseaseId) &&
                 Objects.equals(diseaseName, disease.diseaseName) &&
-                Objects.equals(department, disease.department);
+                Objects.equals(departmentId, disease.departmentId);
     }
 
     // hashCode method
     @Override
     public int hashCode() {
-        return Objects.hash(diseaseId, diseaseName, department);
+        return Objects.hash(diseaseId, diseaseName, departmentId);
     }
 }
