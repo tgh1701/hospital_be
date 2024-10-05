@@ -34,7 +34,7 @@ public class Doctor {
     @Column(name = "Level", length = 50)
     private String level;
 
-    @Column(name = "Departmentid", length = 100)
+    @Column(name = "Departmentid", length = 10)
     private String departmentId;
 
     // Getters and Setters

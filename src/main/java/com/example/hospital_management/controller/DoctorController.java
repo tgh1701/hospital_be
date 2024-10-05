@@ -19,12 +19,17 @@ public class DoctorController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllDoctors() {
-        List<Doctor> doctors = doctorService.getAllDoctors();
-        if (doctors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new ApiResponse(204, "No doctors found"));
+        try {
+            List<Doctor> doctors = doctorService.getAllDoctors();
+            if (doctors.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse(204, "No doctors found"));
+            }
+            return ResponseEntity.ok(new ApiResponse(200, "Doctors retrieved successfully", doctors));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(500, "An unexpected error occurred: " + e.getMessage()));
         }
-        return ResponseEntity.ok(new ApiResponse(200, "Doctors retrieved successfully", doctors));
     }
 
     @GetMapping("/{id}")

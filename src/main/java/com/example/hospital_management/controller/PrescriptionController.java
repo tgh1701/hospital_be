@@ -1,5 +1,10 @@
 package com.example.hospital_management.controller;
 
+//import com.example.hospital_management.dto.MedicineRequest;
+//import com.example.hospital_management.entity.Prescription;
+
+import com.example.hospital_management.entity.Prescription;
+import com.example.hospital_management.exception.CustomException;
 import com.example.hospital_management.response.ApiResponse;
 import com.example.hospital_management.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,18 @@ public class PrescriptionController {
 
     @Autowired
     private PrescriptionService prescriptionService;
+
+    @PostMapping
+    public ResponseEntity<ApiResponse> createPrescription(@RequestBody Prescription prescription) {
+        try {
+            Prescription savedPrescription = prescriptionService.createPrescription(prescription);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ApiResponse(201, "Prescription created successfully", savedPrescription));
+        } catch (CustomException e) {
+            return ResponseEntity.status(e.getStatusCode())
+                    .body(new ApiResponse(e.getStatusCode(), e.getMessage()));
+        }
+    }
 
     @GetMapping("/{visitId}")
     public ResponseEntity<ApiResponse> getPrescriptionByVisitId(@PathVariable String visitId) {

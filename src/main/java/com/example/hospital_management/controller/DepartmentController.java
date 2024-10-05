@@ -20,12 +20,17 @@ public class DepartmentController {
 
     @GetMapping
     public ResponseEntity<ApiResponse> getAllDepartments() {
-        List<Department> departments = departmentService.getAllDepartments();
-        if (departments.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                    .body(new ApiResponse(204, "No departments found"));
+        try {
+            List<Department> departments = departmentService.getAllDepartments();
+            if (departments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body(new ApiResponse(204, "No departments found"));
+            }
+            return ResponseEntity.ok(new ApiResponse(200, "Departments retrieved successfully", departments));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(500, "An unexpected error occurred: " + e.getMessage()));
         }
-        return ResponseEntity.ok(new ApiResponse(200, "Departments retrieved successfully", departments));
     }
 
     @GetMapping("/{id}")
